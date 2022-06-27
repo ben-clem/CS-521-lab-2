@@ -13,43 +13,37 @@ import random
 class TicTacToeSim:
 
     # Part 1
-    def __init__(self, AI: bool = False, AI_turn: int = 2) -> 'TicTacToeSim':
-        # Initialize the simulation
-        # Set up board as a 2D list, turn to player 1, and ai to false
-        # Required fields: board, turn, AI, AI_turn
+    def __init__(self) -> 'TicTacToeSim':
+        """
+        Initialize the simulation
+        Set up board as a 2D list, turn to player 1, and ai to false
+        """
 
-        # !!! Just watched the video example and not supposed to use parameters but input instead => implement that in part 8, use default value for the moment
+        self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        self.turn = 1
+        self.AI = False
+        self.AI_turn = None
+
+    def change_turn(self):
+        """Change turn to other player"""
 
         try:
-            if not isinstance(AI, bool):
-                raise TypeError('AI parameter must be of bool type')
-            else:
-                self.AI = AI
-
-            if not isinstance(AI_turn, int):
-                raise TypeError('AI_turn parameter must be of int type')
-            elif not AI_turn == 1 or 2:
-                raise ValueError('AI_turn parameter must be either 1 or 2')
-            else:
-                self.AI_turn = AI_turn
-
-            self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
-            if not AI or AI and AI_turn == 2:
+            if self.turn == 1:
+                self.turn = 2
+            elif self.turn == 2:
                 self.turn = 1
             else:
-                self.turn = 2
-
+                raise ValueError('turn variable must be either 1 or 2')
         except Exception as err:
             print(err)
 
-    def change_turn(self):
-        # Change turn to other player
-        return
-
     def play_game(self):
         # This is the driver method for the simulation
-        return
+
+        while True:
+            print_board()
+            take_turn()
+            change_turn()
 
     # Part 2
     def print_board(self):
@@ -59,7 +53,7 @@ class TicTacToeSim:
     # Part 3
     def get_move(self):
         # Get input from user asking for their move as a tuple
-        return None
+        return move(tuple)
 
     # Part 4
     def take_turn(self, player):
@@ -99,12 +93,41 @@ class TicTacToeSim:
         # If there is a winning move, win
         # If there is a threat to lose, block
         # Make random move
+
+        random.choice(available_moves)
+
         return
 
     # Part 8
     def get_settings(self):
         # At the start of the simulation, get settings from the user
         # Decide whether to play vs AI and if so whether the user is first or second
+
+        # , AI: bool = False, AI_turn: int = 2
+
+        try:
+            if not isinstance(AI, bool):
+                raise TypeError('AI parameter must be of bool type')
+            else:
+                self.AI = AI
+
+            if not isinstance(AI_turn, int):
+                raise TypeError('AI_turn parameter must be of int type')
+            elif not AI_turn == 1 or 2:
+                raise ValueError('AI_turn parameter must be either 1 or 2')
+            else:
+                self.AI_turn = AI_turn
+
+            self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+            if not AI or AI and AI_turn == 2:
+                self.turn = 1
+            else:
+                self.turn = 2
+
+        except Exception as err:
+            print(err)
+
 
         #### ONLY FOR TESTING #####
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
