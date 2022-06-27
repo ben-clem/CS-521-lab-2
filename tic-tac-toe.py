@@ -36,11 +36,10 @@ class TicTacToeSim:
 
     def play_game(self):
         """This is the driver method for the simulation"""
-        print('Player 1: X')
-        print('Player 2: O')
+        print('\nPlayer 1 is X, Player 2 is O')
         while True:
             self.print_board()
-            self.take_turn()
+            self.take_turn(self.turn)
             self.change_turn()
 
     # Part 2
@@ -55,33 +54,56 @@ class TicTacToeSim:
                 elif self.board[i][j] == 2:
                     chars[i][j] = 'O'
 
-        print('╔═══╦═══╦═══╗')
-        print(f'║ {chars[0][0]} ║ {chars[0][1]} ║ {chars[0][2]} ║')
-        print('╠═══╬═══╬═══╣')
-        print(f'║ {chars[1][0]} ║ {chars[1][1]} ║ {chars[1][2]} ║')
-        print('╠═══╬═══╬═══╣')
-        print(f'║ {chars[2][0]} ║ {chars[2][1]} ║ {chars[2][2]} ║')
-        print('╚═══╩═══╩═══╝')
-        print(f'Player {self.turn} is next')
+        print('\n  Col 0   1   2  ')
+        print('Row ╔═══╦═══╦═══╗')
+        print(f' 0  ║ {chars[0][0]} ║ {chars[0][1]} ║ {chars[0][2]} ║')
+        print('    ╠═══╬═══╬═══╣')
+        print(f' 1  ║ {chars[1][0]} ║ {chars[1][1]} ║ {chars[1][2]} ║')
+        print('    ╠═══╬═══╬═══╣')
+        print(f' 2  ║ {chars[2][0]} ║ {chars[2][1]} ║ {chars[2][2]} ║')
+        print('    ╚═══╩═══╩═══╝')
+
+        print(f"It is Player {self.turn}'s turn")
 
     # Part 3
     def get_move(self):
         """Get input from user asking for their move as a tuple"""
-        row = input('Row:')
-        col = input('Column:')
+        row = int(input('\nRow: '))
+        col = int(input('Column: '))
         return (row, col)
 
     # Part 4
     def take_turn(self, player):
-        # This is the driver method for a players turn
-        return
+        """This is the driver method for a players turn"""
+
+        valid = False
+        available_squares = self.get_available_squares()
+
+        while valid == False:
+            move = self.get_move()
+            # print('DEBUG move', move)
+            # print('DEBUG available_squares', available_squares)
+            if move in available_squares:
+                valid = True
+            else:
+                print('Invalid move!')
+
+        self.make_move(move, player)
 
     def get_available_squares(self):
-        # Get a list of available squares as tuples (row,col)
-        return None
+        """Get a list of available squares as tuples (row,col)"""
+        squares = []
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if self.board[i][j] == 0:
+                    squares.append((i, j))
+        return squares
 
     def make_move(self, move, player):
-        return
+        # print('DEBUG self.board', self.board)
+        # print('DEBUG move', move)
+        # print('DEBUG player', player)
+        self.board[move[0]][move[1]] = player
 
     # Part 5
     def check_winner(self):
@@ -148,7 +170,4 @@ class TicTacToeSim:
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
 if __name__ == '__main__':
     sim = TicTacToeSim()
-    # sim.play_game()
-
-    sim.print_board()
-    sim.get_move()
+    sim.play_game()
