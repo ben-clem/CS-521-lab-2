@@ -8,6 +8,7 @@ Sources:
 
 
 import random
+from re import X
 
 
 class TicTacToeSim:
@@ -18,7 +19,6 @@ class TicTacToeSim:
         Initialize the simulation
         Set up board as a 2D list, turn to player 1, and ai to false
         """
-
         self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.turn = 1
         self.AI = False
@@ -26,7 +26,6 @@ class TicTacToeSim:
 
     def change_turn(self):
         """Change turn to other player"""
-
         try:
             if self.turn == 1:
                 self.turn = 2
@@ -38,17 +37,31 @@ class TicTacToeSim:
             print(err)
 
     def play_game(self):
-        # This is the driver method for the simulation
-
+        """This is the driver method for the simulation"""
         while True:
-            print_board()
-            take_turn()
-            change_turn()
+            self.print_board()
+            self.take_turn()
+            self.change_turn()
 
     # Part 2
     def print_board(self):
-        # Print the state of the board using X (player 1) and O (player 2)
-        return
+        """Print the state of the board using X (player 1) and O (player 2)"""
+
+        chars = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if self.board[i][j] == 1:
+                    chars[i][j] = 'X'
+                elif self.board[i][j] == 2:
+                    chars[i][j] = 'O'
+
+        print('╔═══╦═══╦═══╗')
+        print(f'║ {chars[0][0]} ║ {chars[0][1]} ║ {chars[0][2]} ║')
+        print('╠═══╬═══╬═══╣')
+        print(f'║ {chars[1][0]} ║ {chars[1][1]} ║ {chars[1][2]} ║')
+        print('╠═══╬═══╬═══╣')
+        print(f'║ {chars[2][0]} ║ {chars[2][1]} ║ {chars[2][2]} ║')
+        print('╚═══╩═══╩═══╝')
 
     # Part 3
     def get_move(self):
@@ -127,7 +140,6 @@ class TicTacToeSim:
 
         except Exception as err:
             print(err)
-
 
         #### ONLY FOR TESTING #####
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
