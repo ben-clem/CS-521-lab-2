@@ -6,9 +6,7 @@ Extension: No
 Sources:
 """
 
-
 import random
-from re import X
 
 
 class TicTacToeSim:
@@ -38,6 +36,8 @@ class TicTacToeSim:
 
     def play_game(self):
         """This is the driver method for the simulation"""
+        print('Player 1: X')
+        print('Player 2: O')
         while True:
             self.print_board()
             self.take_turn()
@@ -62,11 +62,14 @@ class TicTacToeSim:
         print('╠═══╬═══╬═══╣')
         print(f'║ {chars[2][0]} ║ {chars[2][1]} ║ {chars[2][2]} ║')
         print('╚═══╩═══╩═══╝')
+        print(f'Player {self.turn} is next')
 
     # Part 3
     def get_move(self):
-        # Get input from user asking for their move as a tuple
-        return move(tuple)
+        """Get input from user asking for their move as a tuple"""
+        row = input('Row:')
+        col = input('Column:')
+        return (row, col)
 
     # Part 4
     def take_turn(self, player):
@@ -145,4 +148,7 @@ class TicTacToeSim:
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
 if __name__ == '__main__':
     sim = TicTacToeSim()
-    sim.play_game()
+    # sim.play_game()
+
+    sim.print_board()
+    sim.get_move()
