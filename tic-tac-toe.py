@@ -37,10 +37,15 @@ class TicTacToeSim:
     def play_game(self):
         """This is the driver method for the simulation"""
         print('\nPlayer 1 is X, Player 2 is O')
-        while True:
+        winner = 0
+        while winner == 0:
             self.print_board()
             self.take_turn(self.turn)
             self.change_turn()
+            winner = self.check_winner()
+        self.print_board()
+        print(f'\nPlayer {winner} has won!' if winner != -
+              1 else '\nDraw!')
 
     # Part 2
     def print_board(self):
@@ -63,9 +68,8 @@ class TicTacToeSim:
         print(f' 2  ║ {chars[2][0]} ║ {chars[2][1]} ║ {chars[2][2]} ║')
         print('    ╚═══╩═══╩═══╝')
 
-        print(f"It is Player {self.turn}'s turn")
-
     # Part 3
+
     def get_move(self):
         """Get input from user asking for their move as a tuple"""
         row = int(input('\nRow: '))
@@ -76,13 +80,13 @@ class TicTacToeSim:
     def take_turn(self, player):
         """This is the driver method for a players turn"""
 
+        print(f"It is Player {player}'s turn")
+
         valid = False
         available_squares = self.get_available_squares()
 
         while valid == False:
             move = self.get_move()
-            # print('DEBUG move', move)
-            # print('DEBUG available_squares', available_squares)
             if move in available_squares:
                 valid = True
             else:
@@ -100,16 +104,35 @@ class TicTacToeSim:
         return squares
 
     def make_move(self, move, player):
-        # print('DEBUG self.board', self.board)
-        # print('DEBUG move', move)
-        # print('DEBUG player', player)
         self.board[move[0]][move[1]] = player
 
     # Part 5
     def check_winner(self):
-        # Check if a player has won, there are 8 ways to win.
-        # Return the player who won 0 if nobody has won, and -1 if it is a draw
-        return 0
+        """
+        Check if a player has won, there are 8 ways to win.
+        Return the player who won 0 if nobody has won, and -1 if it is a draw
+        """
+
+        # Get lines
+        rows = [row for row in self.board]
+        cols = [[self.board[j][i] for j in range(
+            len(self.board[0]))] for i in range(len(self.board))]
+        diags = [[self.board[i][i] for i in range(len(self.board))], [
+            self.board[i][len(self.board) - i - 1] for i in range(len(self.board))]]
+        lines = rows + cols + diags
+
+        # Check for winning line
+        elems_set = set()
+        for line in lines:
+            line_elems = set(line)
+            elems_set.update(line_elems)
+            if len(line_elems) == 1:  # every elements of the line have the same value
+                result = line_elems.pop()  # 0, 1, or 2
+                if result != 0:
+                    return result
+
+        # No winning line
+        return 0 if 0 in elems_set else -1
 
     # Part 6
     def random_move(self):
@@ -169,5 +192,14 @@ class TicTacToeSim:
         #### ONLY FOR TESTING #####
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
 if __name__ == '__main__':
+
     sim = TicTacToeSim()
     sim.play_game()
+    # sim.board = [[2, 1, 1], [1, 2, 2], [2, 1, 1]]
+    # print(sim.check_winner())
+
+    # print(len(set([0, 0, 0])))
+    # print(len(set([0, 1, 0])))
+    # print(len(set([0, 1, 2])))
+    # print(len(set([1, 1, 1])))
+    # print(len(set([2, 2, 2])))
