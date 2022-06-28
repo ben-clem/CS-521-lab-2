@@ -83,14 +83,20 @@ class TicTacToeSim:
         print(f"It is Player {player}'s turn")
 
         valid = False
+        move = None
         available_squares = self.get_available_squares()
 
-        while valid == False:
-            move = self.get_move()
-            if move in available_squares:
-                valid = True
-            else:
-                print('Invalid move!')
+        # AI
+        if self.AI and player == self.AI_turn:
+            move = self.smart_move()
+        # Player
+        else:
+            while valid == False:
+                move = self.get_move()
+                if move in available_squares:
+                    valid = True
+                else:
+                    print('Invalid move!')
 
         self.make_move(move, player)
 
@@ -143,7 +149,54 @@ class TicTacToeSim:
 
     # Part 7
     def winning_move(self, player):
-        # Find a winning move for a player
+        """Find a winning move for a player"""
+
+        # Get moves
+        moves = self.get_available_squares()
+
+        for move in moves:
+            # print('DEBUG move', move)
+
+            # Simulate move
+            # deep copy using list comprehension
+            board_sim = [row[:] for row in self.board]
+            board_sim[move[0]][move[1]] = player
+
+            # print('DEBUG board_sim', board_sim)
+
+            # Check for win
+            row = board_sim[move[0]][:]
+            col = [row[move[1]] for row in board_sim]
+            # Diag(s)
+            diags = []
+            if move[0] == move[1]:
+                diags.append([board_sim[i][i] for i in range(len(board_sim))])
+            if move[0] == len(board_sim) - move[1] - 1:
+                diags.append([board_sim[i][len(board_sim) - i - 1]
+                             for i in range(len(board_sim))])
+
+            # print('DEBUG row', row)
+            # print('DEBUG col', col)
+            # print('DEBUG diags', diags)
+            # print('DEBUG len(diags)', len(diags))
+
+            lines = []
+            lines.append(row)
+            lines.append(col)
+            if len(diags) != 0:
+                for diag in diags:
+                    lines.append(diag)
+
+            # print('DEBUG lines', lines)
+
+            # Check for winning move
+            for line in lines:
+                line_elems = set(line)
+                if len(line_elems) == 1:  # every elements of the line have the same value
+                    result = line_elems.pop()  # 0, 1, or 2
+                    if result != 0:
+                        return move
+
         return None
 
     def threat_to_lose(self):
@@ -151,15 +204,22 @@ class TicTacToeSim:
         return
 
     def smart_move(self):
+
         # If there is a winning move, win
+        winning_move = self.winning_move(self.AI_turn)
+        if winning_move:
+            return winning_move
+
         # If there is a threat to lose, block
+        blocking_move = self.threat_to_lose()
+        if blocking_move:
+            return blocking_move
+
         # Make random move
-
-        random.choice(available_moves)
-
-        return
+        return self.random_move()
 
     # Part 8
+
     def get_settings(self):
         # At the start of the simulation, get settings from the user
         # Decide whether to play vs AI and if so whether the user is first or second
@@ -194,7 +254,10 @@ class TicTacToeSim:
 if __name__ == '__main__':
 
     sim = TicTacToeSim()
+    sim.AI = True
+    sim.AI_turn = 2
     sim.play_game()
+
     # sim.board = [[2, 1, 1], [1, 2, 2], [2, 1, 1]]
     # print(sim.check_winner())
 
