@@ -72,11 +72,15 @@ class TicTacToeSim:
 
     def get_move(self):
         """Get input from user asking for their move as a tuple"""
-        row = int(input('\nRow: '))
-        col = int(input('Column: '))
-        return (row, col)
+        try:
+            row = int(input('\nRow: '))
+            col = int(input('Column: '))
+            return (row, col)
+        except Exception as err:
+            return 0
 
     # Part 4
+
     def take_turn(self, player):
         """This is the driver method for a players turn"""
 
@@ -200,13 +204,16 @@ class TicTacToeSim:
         return None
 
     def threat_to_lose(self):
-        # Run winning_move from other perspective
-        return
+        """Run winning_move from other perspective"""
+        blocking_move = self.winning_move(
+            1) if self.turn == 2 else self.winning_move(2)
+        if blocking_move:
+            return blocking_move
 
     def smart_move(self):
 
         # If there is a winning move, win
-        winning_move = self.winning_move(self.AI_turn)
+        winning_move = self.winning_move(self.turn)
         if winning_move:
             return winning_move
 
@@ -248,6 +255,7 @@ class TicTacToeSim:
 
         except Exception as err:
             print(err)
+
 
         #### ONLY FOR TESTING #####
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
