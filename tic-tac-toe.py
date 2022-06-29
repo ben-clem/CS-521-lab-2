@@ -12,7 +12,7 @@ import random
 class TicTacToeSim:
 
     # Part 1
-    def __init__(self):
+    def __init__(self) -> 'TicTacToeSim':
         """
         Initialize the simulation
         Set up board as a 2D list, turn to player 1, and ai to false
@@ -22,11 +22,11 @@ class TicTacToeSim:
         self.AI = False
         self.AI_turn = None
 
-    def change_turn(self):
+    def change_turn(self) -> None:
         """Change turn to other player"""
         self.turn = 2 if self.turn == 1 else 1
 
-    def play_game(self):
+    def play_game(self) -> None:
         """This is the driver method for the simulation"""
 
         print('\n╔═════════════╗')
@@ -71,7 +71,7 @@ class TicTacToeSim:
             print(f'\nPlayer {winner} wins!')
 
     # Part 2
-    def print_board(self):
+    def print_board(self) -> None:
         """Print the state of the board using X (player 1) and O (player 2)"""
 
         chars = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
@@ -92,7 +92,7 @@ class TicTacToeSim:
         print('    ╚═══╩═══╩═══╝')
 
     # Part 3
-    def get_move(self):
+    def get_move(self) -> (tuple[int, int] | Exception):
         """Get input from user asking for their move as a tuple"""
         try:
             try:
@@ -112,7 +112,7 @@ class TicTacToeSim:
             raise err
 
     # Part 4
-    def take_turn(self, player):
+    def take_turn(self, player: int) -> None:
         """This is the driver method for a players turn"""
 
         if self.AI == True:
@@ -144,7 +144,7 @@ class TicTacToeSim:
 
         self.make_move(move, player)
 
-    def get_available_squares(self):
+    def get_available_squares(self) -> list[tuple[int, int]]:
         """Get a list of available squares as tuples (row,col)"""
         squares = []
         for i in range(0, 3):
@@ -157,7 +157,7 @@ class TicTacToeSim:
         self.board[move[0]][move[1]] = player
 
     # Part 5
-    def check_winner(self):
+    def check_winner(self) -> int:
         """
         Check if a player has won, there are 8 ways to win.
         Return the player who won 0 if nobody has won, and -1 if it is a draw
@@ -185,14 +185,14 @@ class TicTacToeSim:
         return 0 if 0 in elems_set else -1
 
     # Part 6
-    def random_move(self):
+    def random_move(self) -> tuple[int, int]:
         """Returns a random move from the list of available squares."""
         available_moves = self.get_available_squares()
         move = random.choice(available_moves)
         return move
 
     # Part 7
-    def winning_move(self, player):
+    def winning_move(self, player: int) -> tuple[int, int]:
         """Find a winning move for a player"""
 
         moves = self.get_available_squares()
@@ -230,14 +230,14 @@ class TicTacToeSim:
 
         return None  # No winning move
 
-    def threat_to_lose(self):
+    def threat_to_lose(self) -> tuple[int, int]:
         """Run winning_move from other perspective"""
         blocking_move = self.winning_move(
             1) if self.turn == 2 else self.winning_move(2)
         if blocking_move:
             return blocking_move
 
-    def smart_move(self):
+    def smart_move(self) -> tuple[int, int]:
 
         # If there is a winning move, win
         winning_move = self.winning_move(self.turn)
@@ -253,7 +253,7 @@ class TicTacToeSim:
         return self.random_move()
 
     # Part 8
-    def get_settings(self):
+    def get_settings(self) -> None:
         """
         At the start of the simulation, get settings from the user
         Decide whether to play vs AI and if so whether the user is first or second
