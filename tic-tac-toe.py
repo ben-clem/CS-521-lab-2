@@ -36,9 +36,13 @@ class TicTacToeSim:
 
     def play_game(self):
         """This is the driver method for the simulation"""
+        self.get_settings()
         print('\nPlayer 1 is X, Player 2 is O')
         winner = 0
         while winner == 0:
+            print('DEBUG self.turn', self.turn)
+            print('DEBUG self.AI', self.AI)
+            print('DEBUG self.AI_turn', self.AI_turn)
             self.print_board()
             self.take_turn(self.turn)
             self.change_turn()
@@ -226,44 +230,26 @@ class TicTacToeSim:
         return self.random_move()
 
     # Part 8
-
     def get_settings(self):
         # At the start of the simulation, get settings from the user
         # Decide whether to play vs AI and if so whether the user is first or second
-
-        # , AI: bool = False, AI_turn: int = 2
-
-        try:
-            if not isinstance(AI, bool):
-                raise TypeError('AI parameter must be of bool type')
+        mode = input("Do you want to face an AI (True) or 2 player (False)? ")
+        if mode == "True":
+            self.AI = True
+            player_turn = int(
+                input("Do you want to go first (1) or second (2)? "))
+            if player_turn == 1:
+                self.AI_turn = 2
             else:
-                self.AI = AI
-
-            if not isinstance(AI_turn, int):
-                raise TypeError('AI_turn parameter must be of int type')
-            elif not AI_turn == 1 or 2:
-                raise ValueError('AI_turn parameter must be either 1 or 2')
-            else:
-                self.AI_turn = AI_turn
-
-            self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
-            if not AI or AI and AI_turn == 2:
-                self.turn = 1
-            else:
-                self.turn = 2
-
-        except Exception as err:
-            print(err)
-
+                self.AI_turn = 1
+        else:
+            self.AI = False
 
         #### ONLY FOR TESTING #####
         #### DO NOT PUT TESTING CODE OUTSIDE OF HERE ####
 if __name__ == '__main__':
 
     sim = TicTacToeSim()
-    sim.AI = True
-    sim.AI_turn = 2
     sim.play_game()
 
     # sim.board = [[2, 1, 1], [1, 2, 2], [2, 1, 1]]
