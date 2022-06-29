@@ -17,7 +17,7 @@ class TicTacToeSim:
         Initialize the simulation
         Set up board as a 2D list, turn to player 1, and ai to false
         """
-        self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        self.size = 3
         self.turn = 1
         self.AI = False
         self.AI_turn = None
@@ -74,22 +74,29 @@ class TicTacToeSim:
     def print_board(self) -> None:
         """Print the state of the board using X (player 1) and O (player 2)"""
 
-        chars = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
-        for i in range(0, 3):
-            for j in range(0, 3):
+        chars = [[' ' for _ in range(self.size)]
+                 for _ in range(self.size)]
+        for i in range(self.size):
+            for j in range(self.size):
                 if self.board[i][j] == 1:
                     chars[i][j] = 'X'
                 elif self.board[i][j] == 2:
                     chars[i][j] = 'O'
 
-        print('\n  Col 0   1   2')
-        print('Row ╔═══╦═══╦═══╗')
-        print(f' 0  ║ {chars[0][0]} ║ {chars[0][1]} ║ {chars[0][2]} ║')
-        print('    ╠═══╬═══╬═══╣')
-        print(f' 1  ║ {chars[1][0]} ║ {chars[1][1]} ║ {chars[1][2]} ║')
-        print('    ╠═══╬═══╬═══╣')
-        print(f' 2  ║ {chars[2][0]} ║ {chars[2][1]} ║ {chars[2][2]} ║')
-        print('    ╚═══╩═══╩═══╝')
+        # Drawing madness
+        print(''.join(['\n  Col '] +
+              [f'{str(col)[-1]}   ' for col in range(self.size)]))
+        print(
+            ''.join(['Row ╔'] + ['═══╦' for _ in range(self.size - 1)]) + '═══╗')
+        for row in range(self.size - 1):
+            print(''.join([f' {str(row)[-1]}  '] +
+                  [f'║ {chars[row][col]} ' for col in range(self.size)]) + '║')
+            print(
+                ''.join(['    ╠'] + ['═══╬' for _ in range(self.size - 1)]) + '═══╣')
+        print(''.join([f' {str(self.size - 1)[-1]}  '] +
+              [f'║ {chars[self.size - 1][j]} ' for j in range(self.size)]) + '║')
+        print(
+            ''.join(['    ╚'] + ['═══╩' for _ in range(self.size - 1)]) + '═══╝')
 
     # Part 3
 
@@ -100,14 +107,10 @@ class TicTacToeSim:
                 row = int(input('\nRow: '))
             except Exception as err:
                 raise TypeError('/!\ Row must be a number')
-            if len(str(row)) != 1:
-                raise ValueError('/!\ Row must be 1 digit long')
             try:
                 col = int(input('Col: '))
             except Exception as err:
                 raise TypeError('/!\ Col must be a number')
-            if len(str(col)) != 1:
-                raise ValueError('/!\ Col must be 1 digit long')
             return (row, col)
         except Exception as err:
             raise err
@@ -149,8 +152,8 @@ class TicTacToeSim:
     def get_available_squares(self) -> list[tuple[int, int]]:
         """Get a list of available squares as tuples (row,col)"""
         squares = []
-        for i in range(0, 3):
-            for j in range(0, 3):
+        for i in range(0, self.size):
+            for j in range(0, self.size):
                 if self.board[i][j] == 0:
                     squares.append((i, j))
         return squares
@@ -260,6 +263,12 @@ class TicTacToeSim:
         At the start of the simulation, get settings from the user
         Decide whether to play vs AI and if so whether the user is first or second
         """
+        try:
+            self.size = int(input("Board size: "))
+        except Exception as err:
+            raise err
+        self.board = [[0 for _ in range(self.size)] for _ in range(self.size)]
+
         mode = input("Do you want to face an AI (True) or 2 player (False)? ")
         if mode == "True":
             self.AI = True
