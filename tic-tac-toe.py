@@ -92,7 +92,6 @@ class TicTacToeSim:
         print('    ╚═══╩═══╩═══╝')
 
     # Part 3
-
     def get_move(self) -> (tuple[int, int] | Exception):
         """Get input from user asking for their move as a tuple"""
         try:
@@ -113,7 +112,6 @@ class TicTacToeSim:
             raise err
 
     # Part 4
-
     def take_turn(self, player: int) -> None:
         """This is the driver method for a players turn"""
 
@@ -260,15 +258,28 @@ class TicTacToeSim:
         At the start of the simulation, get settings from the user
         Decide whether to play vs AI and if so whether the user is first or second
         """
-        mode = input("Do you want to face an AI (True) or 2 player (False)? ")
-        if mode == "True":
+
+        mode = 'True'
+        try:
+            mode = input(
+                "Do you want to face an AI (True) or 2 player (False)? ")
+        except Exception as err:
+            raise err
+
+        if mode == 'True':
             self.AI = True
-            player_turn = int(
-                input("Do you want to go first (1) or second (2)? "))
+
+            player_turn = 1
+            try:
+                player_turn = int(
+                    input("Do you want to go first (1) or second (2)? "))
+            except Exception as err:
+                raise err
             if player_turn == 1:
                 self.AI_turn = 2
             else:
                 self.AI_turn = 1
+
         else:
             self.AI = False
 
